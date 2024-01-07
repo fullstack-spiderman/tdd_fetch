@@ -2,18 +2,29 @@
 import asyncio
 from pprint import pprint
 from typing import Any
+from urllib.parse import urljoin
 
-import httpx
+from httpx import AsyncClient, Response
 
 
-async def async_find_album_by_id(album_id: int) -> dict[str, Any] | None:
+async def fetch_api(endpoint: str) -> Response:
+    base_url: str = 'https://jsonplaceholder.typicode.com'
+    url: str = urljoin(base_url, endpoint)
+
+    async with AsyncClient() as session:
+        response: Response = await session.get(url)
+        return response
+
+
+async def async_find_album_by_id(album_id: int) -> Response:
     '''A demo func to sync fetch'''
-    url = f'https://jsonplaceholder.typicode.com/albums/{album_id}'
-    async with httpx.AsyncClient() as session:
-        response = await session.get(url)
-        return response.json()["title"] if response.status_code == 200 else None
+    endpoint: str = f"/albums/{album_id}"
+    response: Response = await fetch_api(endpoint)
+    return response
 
 
 if __name__ == "__main__":
-    result: dict[str, Any] | None = asyncio.run(async_find_album_by_id(1))
-    pprint(result)
+    response: Response = asyncio.run(async_find_album_by_id(1))
+    response.raise_for_status()
+    data: dict[str, Any] | None = response.json()
+    pprint({"data": data})

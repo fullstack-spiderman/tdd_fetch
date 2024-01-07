@@ -3,7 +3,7 @@ name: Run Tests and Generate Coverage
 on:
   pull_request:
     branches:
-      - main  # Adjust this if your main branch is named differently
+      - main
 
 jobs:
   test:

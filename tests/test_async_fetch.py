@@ -7,7 +7,10 @@ from pytest_httpx import HTTPXMock
 
 from app.async_fetch import async_find_album_by_id
 
-pytest.mark.
+pytestmark: list[pytest.MarkDecorator] = [
+    pytest.mark.asyncio,
+    pytest.mark.smoke,
+]
 
 async def test_async_find_album_by_id(httpx_mock: HTTPXMock) -> None:
     '''test code for async_find_album_by_id'''

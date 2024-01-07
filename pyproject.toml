@@ -19,6 +19,19 @@ requests-mock = "^1.11.0"
 pytest-httpx = "^0.28.0"
 pytest-asyncio = "^0.23.3"
 
+[tool.pytest.ini_options]
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "-ra",
+]
+env = [
+    "APP_ENV=testing"
+]
+markers = [
+    "smoke: marks tests as smoke (deselect with '-m \"not smoke\"')"
+]
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

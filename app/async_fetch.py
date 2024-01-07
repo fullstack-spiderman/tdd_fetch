@@ -17,8 +17,15 @@ async def fetch_api(endpoint: str) -> Response:
 
 
 async def async_find_album_by_id(album_id: int) -> Response:
-    '''A demo func to sync fetch'''
+    '''A demo func to async fetch an album by it's album_id'''
     endpoint: str = f"/albums/{album_id}"
+    response: Response = await fetch_api(endpoint)
+    return response
+
+
+async def async_find_all_albums() -> Response:
+    '''A demo func to async fetch all albums'''
+    endpoint: str = "/albums/"
     response: Response = await fetch_api(endpoint)
     return response
 

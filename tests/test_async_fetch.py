@@ -5,7 +5,7 @@ from httpx import Response
 import pytest
 from pytest_httpx import HTTPXMock
 
-from app.async_fetch import async_find_album_by_id
+from app.async_fetch import async_find_album_by_id, async_find_all_albums
 
 pytestmark: list[pytest.MarkDecorator] = [
     pytest.mark.asyncio,
@@ -29,6 +29,7 @@ async def test_async_find_album_by_id(httpx_mock: HTTPXMock) -> None:
 
     assert response.status_code == 200
     assert response.json() == mocked_response
+
 
 async def test_async_find_all_albums(httpx_mock: HTTPXMock) -> None:
     '''test code for async_find_all_albums'''

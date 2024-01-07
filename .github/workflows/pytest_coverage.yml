@@ -1,4 +1,4 @@
-name: Run Tests and Generate Coverage
+name: Run Tests and Deploy to GitHub Pages
 
 on:
   pull_request:
@@ -6,39 +6,31 @@ on:
       - main
 
 jobs:
-  test:
+  test_and_deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.12.1
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.12.1
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install poetry
-        poetry install
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install poetry
+          poetry install
 
-    - name: Run tests with coverage
-      run: |
-        poetry run pytest --cov=my_project
+      - name: Run tests with coverage
+        run: |
+          poetry run pytest --cov=app --cov-report html
 
-    - name: Generate HTML coverage report
-      run: |
-        poetry run pytest --cov-report html
-
-    - name: Check if HTML coverage report exists
-      run: |
-        if [ -d "htmlcov" ]; then
-          echo "HTML coverage report exists."
-          git add htmlcov/
-          git commit -m "Add HTML coverage report"
-          git push
-        else
-          echo "HTML coverage report does not exist."
-        fi
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./htmlcov

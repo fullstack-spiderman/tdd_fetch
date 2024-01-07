@@ -30,6 +30,20 @@ async def async_find_all_albums() -> Response:
     return response
 
 
+async def async_find_post_by_id(post_id: int) -> Response:
+    '''A demo func to async fetch an post by it's post_id'''
+    endpoint: str = f"/posts/{post_id}"
+    response: Response = await fetch_api(endpoint)
+    return response
+
+
+async def async_find_all_posts() -> Response:
+    '''A demo func to async fetch all posts'''
+    endpoint: str = "/posts/"
+    response: Response = await fetch_api(endpoint)
+    return response
+
+
 if __name__ == "__main__":
     response: Response = asyncio.run(async_find_album_by_id(1))
     response.raise_for_status()

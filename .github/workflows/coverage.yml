@@ -1,50 +1,43 @@
-name: test_and_coverage
+name: run-code-coverage
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-
-  # Allows to run this workflow manually from the Actions tab
+    branches: ["main"]
   workflow_dispatch:
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Allow one concurrent deployment
 concurrency:
-  group: "pages"
-  cancel-in-progress: true
+  group: pages
+  cancel-in-progress: false
 
 jobs:
-  test_and_coverage:
+  run-code-coverage:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: checkout repo
         uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      - name: setup python
+        uses: actions/setup-python@v4
         with:
-          python-version: 3.12.1
+          python-version:  '3.12'
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install poetry
-          poetry install
+            python -m pip install --upgrade pip
+            pip install poetry
+            poetry install
 
       - name: Run tests with coverage
         run: |
-          poetry run pytest --cov=app --cov-report html
+            poetry run pytest --cov=app --cov-report html
 
       - name: upload artifact
         uses: actions/upload-pages-artifact@v1
